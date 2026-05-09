@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
-import PlausibleProvider from "next-plausible";
 
 const outfit = Outfit({
 	subsets: ["latin"],
@@ -24,9 +24,18 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${outfit.className} `}>
-				<PlausibleProvider src="https://plausible.io/js/pa-GK2saGpXluC-ZUUi4WAwe.js">
-					{children}
-				</PlausibleProvider>
+				<Script
+					defer
+					src="https://plausible.io/js/pa-GK2saGpXluC-ZUUi4WAwe.js"
+					strategy="afterInteractive"
+				/>
+				<Script id="plausible-init" strategy="afterInteractive">
+					{`
+						window.plausible = window.plausible || function () { (plausible.q = plausible.q || []).push(arguments) }, plausible.init = plausible.init || function (i) { plausible.o = i || {} };
+						plausible.init();
+					`}
+				</Script>
+				{children}
 			</body>
 		</html>
 	);
